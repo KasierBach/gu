@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ViewState, Theme } from '../types';
-import { Menu, ShoppingCart, X, Zap, Heart, Shield, Crosshair } from 'lucide-react';
+import { Menu, ShoppingCart, X, Zap, Heart, Shield, Crosshair, User } from 'lucide-react';
 
 interface NavbarProps {
   currentView: ViewState;
@@ -36,8 +36,8 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <nav className={`sticky top-0 z-50 backdrop-blur-md border-b shadow-lg transition-colors duration-500 ${currentTheme === 'ZEON'
-        ? 'bg-red-950/90 border-red-900'
-        : 'bg-slate-900/90 border-slate-700'
+      ? 'bg-red-950/90 border-red-900'
+      : 'bg-slate-900/90 border-slate-700'
       }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
@@ -62,8 +62,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   key={item.label}
                   onClick={() => handleNavClick(item.view)}
                   className={`px-3 py-2 rounded-md text-sm font-medium uppercase tracking-widest transition-all duration-200 ${currentView === item.view
-                      ? `text-white ${currentTheme === 'ZEON' ? 'bg-red-900 border-b-2 border-yellow-500' : 'bg-slate-800 border-b-2 border-gundam-red'}`
-                      : 'text-slate-300 hover:text-white hover:bg-white/10'
+                    ? `text-white ${currentTheme === 'ZEON' ? 'bg-red-900 border-b-2 border-yellow-500' : 'bg-slate-800 border-b-2 border-gundam-red'}`
+                    : 'text-slate-300 hover:text-white hover:bg-white/10'
                     }`}
                 >
                   {item.label}
@@ -78,14 +78,23 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button
                 onClick={onToggleTheme}
                 className={`flex items-center space-x-2 px-3 py-1.5 rounded-full border transition-all ${currentTheme === 'ZEON'
-                    ? 'border-yellow-600 bg-red-900/50 text-yellow-500 hover:bg-red-900'
-                    : 'border-blue-500 bg-blue-900/20 text-blue-400 hover:bg-blue-900/40'
+                  ? 'border-yellow-600 bg-red-900/50 text-yellow-500 hover:bg-red-900'
+                  : 'border-blue-500 bg-blue-900/20 text-blue-400 hover:bg-blue-900/40'
                   }`}
               >
                 {currentTheme === 'ZEON' ? <Crosshair className="h-4 w-4" /> : <Shield className="h-4 w-4" />}
                 <span className="text-xs font-bold">{currentTheme}</span>
               </button>
             )}
+
+            {/* Pilot Profile Icon */}
+            <button
+              onClick={() => handleNavClick('PILOT')}
+              className={`relative p-2 rounded-full group transition-colors ${currentTheme === 'ZEON' ? 'hover:bg-red-800' : 'bg-slate-800 hover:bg-gundam-blue'
+                }`}
+            >
+              <User className={`h-6 w-6 ${currentView === 'PILOT' ? 'text-white' : 'text-slate-300'} group-hover:text-white`} />
+            </button>
 
             {/* Wishlist Icon */}
             <button
@@ -142,13 +151,19 @@ export const Navbar: React.FC<NavbarProps> = ({
                 key={item.label}
                 onClick={() => handleNavClick(item.view)}
                 className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium ${currentView === item.view
-                    ? `text-white border-l-4 ${currentTheme === 'ZEON' ? 'bg-red-900 border-yellow-500' : 'bg-slate-800 border-gundam-red'}`
-                    : 'text-slate-300 hover:text-white hover:bg-white/10'
+                  ? `text-white border-l-4 ${currentTheme === 'ZEON' ? 'bg-red-900 border-yellow-500' : 'bg-slate-800 border-gundam-red'}`
+                  : 'text-slate-300 hover:text-white hover:bg-white/10'
                   }`}
               >
                 {item.label}
               </button>
             ))}
+            <button
+              onClick={() => handleNavClick('PILOT')}
+              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-white/10"
+            >
+              Pilot Profile
+            </button>
             <button
               onClick={() => handleNavClick('WISHLIST')}
               className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-white/10"

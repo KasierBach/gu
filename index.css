@@ -1,0 +1,57 @@
+/* Gundam OS Global Animations and Utility Classes */
+
+@keyframes scan-line {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes progress-bar {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+@keyframes bg-glitch {
+  0% { opacity: 0.1; }
+  5% { opacity: 0.3; }
+  10% { opacity: 0.1; }
+  100% { opacity: 0.1; }
+}
+
+.animate-scan-line {
+  animation: scan-line 8s linear infinite;
+}
+
+.animate-progress {
+  animation: progress-bar 2s ease-in-out infinite;
+}
+
+.animate-bg-glitch {
+  animation: bg-glitch 5s ease-in-out infinite;
+}
+
+/* Custom Utilities for HUD look */
+.hud-border {
+  position: relative;
+}
+
+.hud-border::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+}
+
+.hud-border::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border-bottom: 2px solid currentColor;
+  border-left: 2px solid currentColor;
+}

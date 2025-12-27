@@ -62,4 +62,4 @@ export interface ExchangePost {
   status: 'Open' | 'Pending' | 'Closed';
 }
 
-export type ViewState = 'HOME' | 'SHOP' | 'EXCHANGE' | 'DEALS' | 'CONTACT' | 'WISHLIST' | 'CHECKOUT';
+export type ViewState = 'HOME' | 'SHOP' | 'EXCHANGE' | 'DEALS' | 'CONTACT' | 'WISHLIST' | 'CHECKOUT' | 'PILOT';

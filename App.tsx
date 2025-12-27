@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Shop } from './components/Shop';
@@ -8,6 +8,9 @@ import { Exchange } from './components/Exchange';
 import { Deals } from './components/Deals';
 import { Contact } from './components/Contact';
 import { Wishlist } from './components/Wishlist';
+import { PilotProfile } from './components/PilotProfile';
+import { TerminalOverlay } from './components/TerminalOverlay';
+import { Checkout } from './components/Checkout';
 import { Product, CartItem, ViewState, Theme } from './types';
 import { PRODUCTS } from './constants';
 
@@ -18,10 +21,28 @@ const App: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [wishlistIds, setWishlistIds] = useState<string[]>([]);
   const [theme, setTheme] = useState<Theme>('EFSF');
+  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
 
   const toggleTheme = () => {
     setTheme(prev => prev === 'EFSF' ? 'ZEON' : 'EFSF');
   };
+
+  // Keyboard listeners for Terminal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Toggle with Ctrl+K or / (if not in input)
+      if ((e.ctrlKey && e.key === 'k') || (e.key === '/' && document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA')) {
+        e.preventDefault();
+        setIsTerminalOpen(prev => !prev);
+      }
+      if (e.key === 'Escape') {
+        setIsTerminalOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // Wishlist Logic
   const toggleWishlist = (id: string) => {
@@ -221,6 +242,10 @@ const App: React.FC = () => {
         );
       case 'CONTACT':
         return <Contact />;
+      case 'CHECKOUT':
+        return <Checkout cartItems={cartItems} onNavigate={setCurrentView} currentTheme={theme} />;
+      case 'PILOT':
+        return <PilotProfile theme={theme} />;
       default:
         return (
           <Shop
@@ -347,6 +372,18 @@ const App: React.FC = () => {
         items={cartItems}
         onUpdateQuantity={updateQuantity}
         onRemoveItem={removeItem}
+        onCheckout={() => {
+          setCurrentView('CHECKOUT');
+          setIsCartOpen(false);
+        }}
+      />
+
+      <TerminalOverlay
+        isOpen={isTerminalOpen}
+        onClose={() => setIsTerminalOpen(false)}
+        onNavigate={setCurrentView}
+        onToggleTheme={toggleTheme}
+        currentTheme={theme}
       />
     </div>
   );
