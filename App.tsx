@@ -11,6 +11,9 @@ import { Wishlist } from './components/Wishlist';
 import { PilotProfile } from './components/PilotProfile';
 import { TerminalOverlay } from './components/TerminalOverlay';
 import { Checkout } from './components/Checkout';
+import { Login } from './components/Login';
+import { Register } from './components/Register';
+import { AuthProvider } from './context/AuthContext';
 import { Product, CartItem, ViewState, Theme } from './types';
 import { PRODUCTS } from './constants';
 
@@ -246,6 +249,10 @@ const App: React.FC = () => {
         return <Checkout cartItems={cartItems} onNavigate={setCurrentView} currentTheme={theme} />;
       case 'PILOT':
         return <PilotProfile theme={theme} />;
+      case 'LOGIN':
+        return <Login onNavigate={setCurrentView} theme={theme} />;
+      case 'REGISTER':
+        return <Register onNavigate={setCurrentView} theme={theme} />;
       default:
         return (
           <Shop
@@ -259,133 +266,135 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen text-slate-100 flex flex-col font-sans selection:text-white transition-colors duration-500 ${theme === 'ZEON' ? 'bg-zinc-900 selection:bg-red-700' : 'bg-slate-900 selection:bg-gundam-blue'
-      }`}>
-      <Navbar
-        currentView={currentView}
-        onNavigate={setCurrentView}
-        cartCount={cartCount}
-        onOpenCart={() => setIsCartOpen(true)}
-        currentTheme={theme}
-        onToggleTheme={toggleTheme}
-      />
+    <AuthProvider>
+      <div className={`min-h-screen text-slate-100 flex flex-col font-sans selection:text-white transition-colors duration-500 ${theme === 'ZEON' ? 'bg-zinc-900 selection:bg-red-700' : 'bg-slate-900 selection:bg-gundam-blue'
+        }`}>
+        <Navbar
+          currentView={currentView}
+          onNavigate={setCurrentView}
+          cartCount={cartCount}
+          onOpenCart={() => setIsCartOpen(true)}
+          currentTheme={theme}
+          onToggleTheme={toggleTheme}
+        />
 
-      <main className="flex-grow">
-        {renderView()}
-      </main>
+        <main className="flex-grow">
+          {renderView()}
+        </main>
 
-      <footer className="bg-slate-950 border-t border-slate-800 pt-16 pb-8 relative overflow-hidden">
-        {/* Decorative Grid Background */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
+        <footer className="bg-slate-950 border-t border-slate-800 pt-16 pb-8 relative overflow-hidden">
+          {/* Decorative Grid Background */}
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
 
-        {/* Scanner Line */}
-        <div className={`absolute top-0 left-0 w-full h-[1px] ${theme === 'ZEON' ? 'bg-gradient-to-r from-transparent via-red-500 to-transparent' : 'bg-gradient-to-r from-transparent via-cyan-500 to-transparent'} opacity-50 shadow-[0_0_15px_rgba(255,255,255,0.5)]`} />
+          {/* Scanner Line */}
+          <div className={`absolute top-0 left-0 w-full h-[1px] ${theme === 'ZEON' ? 'bg-gradient-to-r from-transparent via-red-500 to-transparent' : 'bg-gradient-to-r from-transparent via-cyan-500 to-transparent'} opacity-50 shadow-[0_0_15px_rgba(255,255,255,0.5)]`} />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-            <div className="col-span-1 md:col-span-2 space-y-6">
-              <div className="flex items-center gap-3">
-                <div className={`w-12 h-12 flex items-center justify-center border-2 rounded ${theme === 'ZEON' ? 'border-yellow-500 bg-red-900/20' : 'border-gundam-blue bg-blue-900/20'}`}>
-                  <div className={`w-8 h-8 ${theme === 'ZEON' ? 'bg-yellow-500' : 'bg-gundam-blue'} [clip-path:polygon(50%_0%,100%_25%,100%_75%,50%_100%,0%_75%,0%_25%)]`} />
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+              <div className="col-span-1 md:col-span-2 space-y-6">
+                <div className="flex items-center gap-3">
+                  <div className={`w-12 h-12 flex items-center justify-center border-2 rounded ${theme === 'ZEON' ? 'border-yellow-500 bg-red-900/20' : 'border-gundam-blue bg-blue-900/20'}`}>
+                    <div className={`w-8 h-8 ${theme === 'ZEON' ? 'bg-yellow-500' : 'bg-gundam-blue'} [clip-path:polygon(50%_0%,100%_25%,100%_75%,50%_100%,0%_75%,0%_25%)]`} />
+                  </div>
+                  <div>
+                    <span className="font-display font-black text-3xl tracking-wider text-white block leading-none">
+                      GUNDAM
+                    </span>
+                    <span className={`font-bold tracking-[0.3em] text-sm ${theme === 'ZEON' ? 'text-red-500' : 'text-cyan-400'}`}>
+                      UNIVERSE // OS.VER.3.0
+                    </span>
+                  </div>
                 </div>
-                <div>
-                  <span className="font-display font-black text-3xl tracking-wider text-white block leading-none">
-                    GUNDAM
-                  </span>
-                  <span className={`font-bold tracking-[0.3em] text-sm ${theme === 'ZEON' ? 'text-red-500' : 'text-cyan-400'}`}>
-                    UNIVERSE // OS.VER.3.0
-                  </span>
+                <p className="text-slate-400 font-mono text-sm max-w-sm leading-relaxed border-l-2 border-slate-800 pl-4">
+                  Global distribution network for Mobile Suit weaponry and assembly kits.
+                  Warning: Authorized personnel only. Unauthorized access will be countered with maximum force.
+                </p>
+              </div>
+
+              <div>
+                <h4 className={`font-bold uppercase mb-6 tracking-widest text-sm flex items-center gap-2 ${theme === 'ZEON' ? 'text-yellow-500' : 'text-gundam-blue'}`}>
+                  <div className="w-1 h-4 bg-current" /> Quick Access
+                </h4>
+                <ul className="space-y-3 text-slate-400 text-sm font-mono">
+                  {['Shop Hangar', 'Exchange Comms', 'Support Relay', 'Pilot Profile'].map((item) => (
+                    <li key={item} className="group cursor-pointer flex items-center gap-2 hover:text-white transition-colors">
+                      <span className={`w-1.5 h-1.5 rounded-full ${theme === 'ZEON' ? 'bg-red-600 group-hover:bg-yellow-500' : 'bg-slate-600 group-hover:bg-cyan-400'} transition-colors`} />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <h4 className={`font-bold uppercase mb-6 tracking-widest text-sm flex items-center gap-2 ${theme === 'ZEON' ? 'text-yellow-500' : 'text-gundam-blue'}`}>
+                  <div className="w-1 h-4 bg-current" /> Sub-Space Comm
+                </h4>
+                <p className="text-xs text-slate-500 mb-4">Subscribe for high-priority equipment drops.</p>
+                <div className="flex relative group">
+                  <input
+                    type="text"
+                    placeholder="ENTER_FREQ_ID..."
+                    className="bg-slate-900/50 border border-slate-700 px-4 py-3 text-xs font-mono w-full focus:outline-none focus:border-white/50 text-white placeholder:text-slate-600 transition-colors"
+                  />
+                  <button className={`px-4 font-bold text-lg transition-all absolute right-0 top-0 bottom-0 border-l border-slate-700 hover:bg-white/10 ${theme === 'ZEON' ? 'text-yellow-500' : 'text-cyan-400'}`}>
+                    &rarr;
+                  </button>
+                  {/* Corner Accents */}
+                  <div className="absolute -bottom-1 -left-1 w-2 h-2 border-l border-b border-slate-500" />
+                  <div className="absolute -top-1 -right-1 w-2 h-2 border-r border-t border-slate-500" />
                 </div>
               </div>
-              <p className="text-slate-400 font-mono text-sm max-w-sm leading-relaxed border-l-2 border-slate-800 pl-4">
-                Global distribution network for Mobile Suit weaponry and assembly kits.
-                Warning: Authorized personnel only. Unauthorized access will be countered with maximum force.
-              </p>
             </div>
 
-            <div>
-              <h4 className={`font-bold uppercase mb-6 tracking-widest text-sm flex items-center gap-2 ${theme === 'ZEON' ? 'text-yellow-500' : 'text-gundam-blue'}`}>
-                <div className="w-1 h-4 bg-current" /> Quick Access
-              </h4>
-              <ul className="space-y-3 text-slate-400 text-sm font-mono">
-                {['Shop Hangar', 'Exchange Comms', 'Support Relay', 'Pilot Profile'].map((item) => (
-                  <li key={item} className="group cursor-pointer flex items-center gap-2 hover:text-white transition-colors">
-                    <span className={`w-1.5 h-1.5 rounded-full ${theme === 'ZEON' ? 'bg-red-600 group-hover:bg-yellow-500' : 'bg-slate-600 group-hover:bg-cyan-400'} transition-colors`} />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h4 className={`font-bold uppercase mb-6 tracking-widest text-sm flex items-center gap-2 ${theme === 'ZEON' ? 'text-yellow-500' : 'text-gundam-blue'}`}>
-                <div className="w-1 h-4 bg-current" /> Sub-Space Comm
-              </h4>
-              <p className="text-xs text-slate-500 mb-4">Subscribe for high-priority equipment drops.</p>
-              <div className="flex relative group">
-                <input
-                  type="text"
-                  placeholder="ENTER_FREQ_ID..."
-                  className="bg-slate-900/50 border border-slate-700 px-4 py-3 text-xs font-mono w-full focus:outline-none focus:border-white/50 text-white placeholder:text-slate-600 transition-colors"
-                />
-                <button className={`px-4 font-bold text-lg transition-all absolute right-0 top-0 bottom-0 border-l border-slate-700 hover:bg-white/10 ${theme === 'ZEON' ? 'text-yellow-500' : 'text-cyan-400'}`}>
-                  &rarr;
-                </button>
-                {/* Corner Accents */}
-                <div className="absolute -bottom-1 -left-1 w-2 h-2 border-l border-b border-slate-500" />
-                <div className="absolute -top-1 -right-1 w-2 h-2 border-r border-t border-slate-500" />
+            <div className="border-t border-slate-800/50 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-mono text-slate-600">
+              <div>
+                <span>SYS_ID: 874-992-X</span>
+                <span className="mx-4">|</span>
+                <span>SECURE CONNECTION ESTABLISHED</span>
+              </div>
+              <div className="flex gap-6">
+                <span className="hover:text-white cursor-pointer transition-colors">PRIVACY_PROTOCOL</span>
+                <span className="hover:text-white cursor-pointer transition-colors">TERMS_OF_ENGAGEMENT</span>
               </div>
             </div>
-          </div>
 
-          <div className="border-t border-slate-800/50 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-mono text-slate-600">
-            <div>
-              <span>SYS_ID: 874-992-X</span>
-              <span className="mx-4">|</span>
-              <span>SECURE CONNECTION ESTABLISHED</span>
-            </div>
-            <div className="flex gap-6">
-              <span className="hover:text-white cursor-pointer transition-colors">PRIVACY_PROTOCOL</span>
-              <span className="hover:text-white cursor-pointer transition-colors">TERMS_OF_ENGAGEMENT</span>
+            <div className="mt-8 text-center text-slate-700 text-[10px] font-mono tracking-widest uppercase">
+              © {new Date().getFullYear()} Gundam Universe. {theme === 'ZEON' ? 'GLORY TO THE PRINCIPALITY OF ZEON.' : 'EARTH FEDERATION SPACE FORCE.'}
             </div>
           </div>
+        </footer>
 
-          <div className="mt-8 text-center text-slate-700 text-[10px] font-mono tracking-widest uppercase">
-            © {new Date().getFullYear()} Gundam Universe. {theme === 'ZEON' ? 'GLORY TO THE PRINCIPALITY OF ZEON.' : 'EARTH FEDERATION SPACE FORCE.'}
-          </div>
-        </div>
-      </footer>
+        {/* Overlays */}
+        <ProductModal
+          product={selectedProduct}
+          isOpen={!!selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+          onAddToCart={addToCart}
+          isWishlisted={selectedProduct ? wishlistIds.includes(selectedProduct.id) : false}
+          onToggleWishlist={toggleWishlist}
+        />
 
-      {/* Overlays */}
-      <ProductModal
-        product={selectedProduct}
-        isOpen={!!selectedProduct}
-        onClose={() => setSelectedProduct(null)}
-        onAddToCart={addToCart}
-        isWishlisted={selectedProduct ? wishlistIds.includes(selectedProduct.id) : false}
-        onToggleWishlist={toggleWishlist}
-      />
+        <Cart
+          isOpen={isCartOpen}
+          onClose={() => setIsCartOpen(false)}
+          items={cartItems}
+          onUpdateQuantity={updateQuantity}
+          onRemoveItem={removeItem}
+          onCheckout={() => {
+            setCurrentView('CHECKOUT');
+            setIsCartOpen(false);
+          }}
+        />
 
-      <Cart
-        isOpen={isCartOpen}
-        onClose={() => setIsCartOpen(false)}
-        items={cartItems}
-        onUpdateQuantity={updateQuantity}
-        onRemoveItem={removeItem}
-        onCheckout={() => {
-          setCurrentView('CHECKOUT');
-          setIsCartOpen(false);
-        }}
-      />
-
-      <TerminalOverlay
-        isOpen={isTerminalOpen}
-        onClose={() => setIsTerminalOpen(false)}
-        onNavigate={setCurrentView}
-        onToggleTheme={toggleTheme}
-        currentTheme={theme}
-      />
-    </div>
+        <TerminalOverlay
+          isOpen={isTerminalOpen}
+          onClose={() => setIsTerminalOpen(false)}
+          onNavigate={setCurrentView}
+          onToggleTheme={toggleTheme}
+          currentTheme={theme}
+        />
+      </div>
+    </AuthProvider>
   );
 };
 

@@ -6,8 +6,12 @@ interface PilotProfileProps {
     theme?: Theme;
 }
 
+import { useAuth } from '../context/AuthContext';
+
 export const PilotProfile: React.FC<PilotProfileProps> = ({ theme = 'EFSF' }) => {
+    const { user } = useAuth();
     const isZeon = theme === 'ZEON';
+    // ... (keep existing color vars)
     const accentColor = isZeon ? 'text-yellow-500' : 'text-gundam-blue';
     const borderColor = isZeon ? 'border-red-900' : 'border-slate-700';
     const bgCard = isZeon ? 'bg-red-950/20' : 'bg-slate-800/30';
@@ -40,18 +44,22 @@ export const PilotProfile: React.FC<PilotProfileProps> = ({ theme = 'EFSF' }) =>
                             </div>
                         </div>
                         <div className={`absolute -bottom-2 -right-2 px-2 py-1 text-[10px] font-bold uppercase rounded ${isZeon ? 'bg-red-900 text-yellow-500' : 'bg-blue-900 text-cyan-400'}`}>
-                            LVL 45
+                            {user?.rank || 'RECRUIT'}
                         </div>
                     </div>
 
                     <div className="text-center md:text-left">
                         <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
-                            <h2 className="text-4xl font-display font-black text-white tracking-tighter">PILOT_ID: BANAGHER_LINKS</h2>
+                            <h2 className="text-4xl font-display font-black text-white tracking-tighter">
+                                PILOT_ID: {user?.name?.toUpperCase().replace(/\s+/g, '_') || 'UNKNOWN_PILOT'}
+                            </h2>
                             <div className={`px-2 py-0.5 text-[10px] font-bold border ${isZeon ? 'border-yellow-500 text-yellow-500' : 'border-gundam-blue text-gundam-blue'}`}>
                                 ACTIVE
                             </div>
                         </div>
-                        <p className="text-slate-500 text-sm mb-4">ASSIGNED_UNIT: RX-0 UNICORN GUNDAM // SECTOR 7</p>
+                        <p className="text-slate-500 text-sm mb-4">
+                            ID: {user?.id} // FACTION: {user?.faction} // JOINED: {user?.joinedDate}
+                        </p>
 
                         <div className="flex flex-wrap gap-4 justify-center md:justify-start">
                             <div className="flex items-center gap-2 text-xs text-slate-400">

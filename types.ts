@@ -62,4 +62,14 @@ export interface ExchangePost {
   status: 'Open' | 'Pending' | 'Closed';
 }
 
-export type ViewState = 'HOME' | 'SHOP' | 'EXCHANGE' | 'DEALS' | 'CONTACT' | 'WISHLIST' | 'CHECKOUT' | 'PILOT';
+export type ViewState = 'HOME' | 'SHOP' | 'EXCHANGE' | 'DEALS' | 'CONTACT' | 'WISHLIST' | 'CHECKOUT' | 'PILOT' | 'LOGIN' | 'REGISTER';
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  faction: 'EFSF' | 'ZEON';
+  rank: string;
+  avatar?: string;
+  joinedDate: string;
+}
